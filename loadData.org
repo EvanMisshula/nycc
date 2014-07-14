@@ -1,0 +1,310 @@
+* Initialize languages
+#+source: configuration
+#+begin_src emacs-lisp :results output
+;; Doesn't work
+ ;; first it is necessary to ensure that Org-mode loads support for the
+  ;; languages used by code blocks in this article
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     (ditaa      . t)     
+     (dot        . t)
+     (emacs-lisp . t)
+     (haskell    . t)
+     (org        . t)
+     (perl       . t)
+     (python     . t)
+     (R          . t)
+     (ruby       . t)
+     (sh         . t)
+     (sqlite     . t)))
+  ;; then we'll remove the need to confirm evaluation of each code
+  ;; block, NOTE: if you are concerned about execution of malicious code
+  ;; through code blocks, then comment out the following line
+  (setq org-confirm-babel-evaluate nil)
+  ;; finally we'll customize the default behavior of Org-mode code blocks
+  ;; so that they can be used to display examples of Org-mode syntax
+  (setf org-babel-default-header-args:org '((:exports . "code")))
+#+end_src
+
+#+name: square
+#+header: :var x=5
+#+begin_src python
+return x*x
+#+end_src
+
+#+RESULTS: square
+: 25
+
+#+name: load_var
+#+BEGIN_SRC R :file check_load.txt :results output :export both :session nyc
+  library(foreign)
+  df <- read.spss(file = "/home/evan/Documents/city_council/data20140702/City Council (ALL).sav",to.data.frame = TRUE)
+  head(d)
+#+END_SRC
+
+#+RESULTS: load_var
+[[file:check_load.txt]]
+
+#+name: sub_out_first_vars
+#+BEGIN_SRC R :file check_first_set.txt :results output :export both :session nyc
+rawLabels <- colnames(df)
+
+varNames <- c("DateCollected",
+              "DateSent",                                         
+              "iPad",                                              
+#              "ScannedCoupon",
+              "AgeQualified",
+              "GeoQualified",
+              "Consented",                          
+              "HelpedNeighbor",    
+              "Other1",                                             
+              "HelpedByNeighbor")
+
+varNames <- c(varNames,
+              "Other2",
+              "lastNeighborConflictTime",
+              "Other3",
+              "EverShotAt",
+              "ShotAtCount",
+              "EverStabbed",
+              "StabbedCount",
+              "NeighbSpokenWCount",
+              "GunsSeenCount",
+              "HeardPersonThreatenedWGunHereL12Count",
+              "HeardGunshotsHereL12Count")
+
+varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+(varDf)
+#write.table(varDf,file = "varCheck.csv",sep = ",")
+#+END_SRC
+
+#+RESULTS: sub_out_first_vars
+[[file:check_first_set.txt]]
+
+#+name: sub_out_sec_vars
+#+BEGIN_SRC R :file check_second_set.txt :results output :export both :session nyc 
+varNames <- c(varNames,
+              "SQF12mo",
+              "RClubStepIn",
+              "RGirlsNewG",
+              "RFightPartyNotHere",
+              "RBumpSwingNotHere",
+              "RJordans",
+              "RFriendAttacked",
+              "ROwedMoneyPlayed",
+              "RexGirlPlayed")
+varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+#write.table(varDf,file = "varCheck.csv",sep = ",")
+
+
+varNames <- c(varNames,
+              "RSocialMedia",
+              "RBasketball",
+              "RGirlClaim",
+              "RPublicDis",
+              "RStolenJacketPublic",
+              "RMoneyOwed",
+              "RBetWelch",
+              "RBodegaCheat",
+              "RBrothersAttacker",
+              "AgeAtDeath",
+              "RKnowReffer")
+
+varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+#write.table(varDf,file = "varCheck.csv",sep = ",")
+(varDf)
+#+END_SRC
+
+#+RESULTS: sub_out_sec_vars
+[[file:check_second_set.txt]]
+
+#+name: sub_out_scenario_vars
+#+BEGIN_SRC R :file check_scenario_set.txt :results output :export both :session nyc 
+  varNames <- c(varNames,
+                "FexGirlPlayed",
+                "FPublicDis",              
+                "FBetWelch",
+                "FFightPartyNotHere",
+                "FBrothersAttacker",
+                "FGirlClaim",
+                "FGirlsNewG",
+                "FBumpSwingNotHere",
+                "FStolenJacketPublic",              
+                "FBasketball")
+
+  varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+  # write.table(varDf,file = "varCheck.csv",sep = ",")
+
+  varNames <- c(varNames,
+                "FBodegaCheat",
+                "FFriendAttacked",
+                "FMoneyOwed",
+                "FClubStepIn",
+                "FJordans",
+                "FSocialMedia",
+                "FOwedMoneyPlayed")
+
+  varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+  #write.table(varDf,file = "varCheck.csv",sep = ",")
+  (varDf)
+#+END_SRC
+
+#+RESULTS: sub_out_scenario_vars
+[[file:check_scenario_set.txt]]
+
+
+#+name: sub_out_safety_vars
+#+BEGIN_SRC R :file check_safety_set.txt :results output :export both :session nyc 
+                                          #Check Feels safe
+  varNames <- c(varNames,
+                "FAgeAtDeath",
+                "countOnPolice",
+                "countOnFire",
+                "countOnAmbulance",
+                "countOnLeaders",
+                "countOnPrograms",
+                "countOnTeachers",
+                "GangCommon",
+                "reportPolice",
+                "RFeelSafeNight",
+                "RFeelSafeDay",
+                "FFeelSafeNight",
+                "FFeeLSafeDay",
+                "SocialMediaUsed")
+  varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+  #write.table(varDf,file = "varCheck.csv",sep = ",")
+
+  varNames <- c(varNames,
+                "ThreatenedFacebook",
+                "ThreatenedTwitter",
+                "ThreatenedInstagram",                                   
+                "ThreatenedSnapchat",                                   
+                "ThreatenedYoutube",                                    
+                "ThreatenedVine",                                       
+                "ThreatenedOtherSmedia",                      
+                "AttendAVrallyL12mo")
+
+  varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+  #write.table(varDf,file = "varCheck.csv",sep = ",")
+  (varDf)
+#+END_SRC
+
+#+RESULTS: sub_out_safety_vars
+[[file:check_safety_set.txt]]
+
+
+
+#+name: sub_out_image_vars
+#+BEGIN_SRC R :file check_images_set.txt :results output :export both :session nyc 
+
+      imagesResp <- paste("Image",1:5,sep = "")
+      imageCount <- paste("SeenImage",1:5,"count",sep = "")
+      ## if(survey=="Harlem") {
+      ##     persImgCt <- 6
+      ## } else {
+      ##     persImgCt <- 8
+      ## }
+      persImgCt <- 8
+      personRespA <- paste("RknowsP",1:persImgCt,sep = "")
+      personCommA <- paste("RcommP",1:persImgCt,"L12mo",sep = "")
+
+      personRespH <- paste("RknowsP",1:persImgCt,sep = "")
+      personCommH <- paste("RcommP",1:persImgCt,"L12mo",sep = "")
+
+      imageM <- matrix(c(imagesResp,imageCount),byrow = F,ncol=2)
+      imageM <-matrix(matrix(imageM,byrow = TRUE,nrow=2),ncol= 1)
+      respMH <- matrix(c(personRespH,personCommH),byrow = F,ncol=2)
+      respMH <- matrix(matrix(respMH,byrow = TRUE,nrow=2),ncol= 1)
+
+
+      persImgCt <- 8
+      personRespE <- paste("RknowsP",1:persImgCt,sep = "")
+      personCommE <- paste("RcommP",1:persImgCt,"L12mo",sep = "")
+
+      imageM <- matrix(c(imagesResp,imageCount),byrow = F,ncol=2)
+      imageM <- matrix(matrix(imageM,byrow = TRUE,nrow=2),ncol= 1)
+      respME <- matrix(c(personRespE,personCommE),byrow = F,ncol=2)
+      respME <- matrix(matrix(respME,byrow = TRUE,nrow=2),ncol= 1)
+
+    imageM <- matrix(c(imagesResp,imageCount),byrow = F,ncol=2)
+    imageM <- matrix(matrix(imageM,byrow = TRUE,nrow=2),ncol= 1)
+    respMA <- matrix(c(personRespA,personCommA),byrow = F,ncol=2)
+    respMA <- matrix(matrix(respMA,byrow = TRUE,nrow=2),ncol= 1)
+      
+
+
+  #    varNamesH <- c(varNames,imageM,respMH)
+  #    varNamesE <- c(varNames,imageM,respME)
+      varNamesA <- c(varNames,imageM,respMA)
+      #rawLabelsH <- colnames(df2)
+      #rawLabelsE <- colnames(df1)
+
+      ## varDfH <- data.frame(matrix(c(rawLabels[1:length(varNamesH)],varNamesH),byrow = F,ncol=2))
+      ## write.table(varDf,file = "varCheckH.csv",sep = ",")
+
+      ## varDfE <- data.frame(matrix(c(rawLabels[1:length(varNamesE)],varNamesE),byrow = F,ncol=2))
+      ## write.table(varDf,file = "varCheck.csvE",sep = ",")
+
+   #   varNames <- varNamesH
+
+      varNames <- c(varNamesA,
+                    "age",
+                    "EdCompleted",
+                    "inSchool",
+                    "employed",
+                    "TimeOutsideHere",
+                    "sleepTime",
+                    "rCoup",
+                    "Coup1",
+                    "Coup2",
+                    "Coup3",
+                    "Interviewer")
+
+    #  varDfE <- data.frame(matrix(c(rawLabels[1:length(varNamesE)],varNamesE),byrow = F,ncol=2)) 
+varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
+    #  write.table(varDfE,file = "varCheckE.csv",sep = ",")
+  (varDf)
+      ## varNamesE <- c(varNamesE,
+      ##               "age",
+      ##               "EdCompleted",
+      ##               "inSchool",
+      ##               "employed",
+      ##               "TimeOutsideHere",
+      ##               "sleepTime",
+      ##               "Coup1",
+      ##               "Coup2",
+      ##               "Coup3",
+      ##               "Interviewer")
+
+      ## varDfE <- data.frame(matrix(c(rawLabels[1:length(varNamesE)],varNamesE),byrow = F,ncol=2))
+      ## write.table(varDfE,file = "varCheckE.csv",sep = ",")
+
+      ## colnames(df1) <- varNamesE
+      ## colnames(df2) <- varNamesH
+
+      ## pgmR.E <- df1[,89:104]
+      ## pgmR.H <- df2[,89:100]
+
+      ## df1 <- df1[,c(1:88,105:114)]
+      ## df2 <- df2[,c(1:88,101:110)]
+
+      ## df1$location="EastNY"
+      ## df2$location="Harlem"
+
+      ## df <- rbind(df2,df1)
+
+#+END_SRC
+
+#+RESULTS: sub_out_image_vars
+[[file:check_images_set.txt]]
+
+#+name: write_the_file
+#+BEGIN_SRC R :file cc.csv :results output :export both :session nyc 
+  colnames(df) <- varNames
+  write.table(x=df,file="ciyCouncil_all.csv",sep = "\t")
+#+END_SRC
+
+#+RESULTS: write_the_file
+[[file:check_images_set.txt]]
+
