@@ -36,6 +36,8 @@ return x*x
 #+RESULTS: square
 : 25
 
+* manage R data frame
+** demo1 
 #+name: load_var
 #+BEGIN_SRC R :file check_load.txt :results output :export both :session nyc
   library(foreign)
@@ -81,7 +83,7 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 
 #+RESULTS: sub_out_first_vars
 [[file:check_first_set.txt]]
-
+** Rscenarios
 #+name: sub_out_sec_vars
 #+BEGIN_SRC R :file check_second_set.txt :results output :export both :session nyc 
 varNames <- c(varNames,
@@ -118,7 +120,7 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 
 #+RESULTS: sub_out_sec_vars
 [[file:check_second_set.txt]]
-
+** Fscenarios
 #+name: sub_out_scenario_vars
 #+BEGIN_SRC R :file check_scenario_set.txt :results output :export both :session nyc 
   varNames <- c(varNames,
@@ -153,7 +155,7 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 #+RESULTS: sub_out_scenario_vars
 [[file:check_scenario_set.txt]]
 
-
+** civil trust
 #+name: sub_out_safety_vars
 #+BEGIN_SRC R :file check_safety_set.txt :results output :export both :session nyc 
                                           #Check Feels safe
@@ -193,7 +195,7 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 #+RESULTS: sub_out_safety_vars
 [[file:check_safety_set.txt]]
 
-
+** Program Recognition
 
 #+name: sub_out_image_vars
 #+BEGIN_SRC R :file check_images_set.txt :results output :export both :session nyc 
@@ -306,5 +308,259 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 #+END_SRC
 
 #+RESULTS: write_the_file
-[[file:check_images_set.txt]]
+[[file:cc.csv]]
+
+* civil trust
+** Police Trust
+*** code
+#+name: police_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_police.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  countOnPolice <- df[,'countOnPolice']
+  ctOnPolice=rep(-1,nR)
+
+
+  ctOnPolice[is.na(countOnPolice)] <- NA
+  ctOnPolice[as.numeric(countOnPolice)==1] <- 5
+  ctOnPolice[as.numeric(countOnPolice)==2] <- 4            
+  ctOnPolice[as.numeric(countOnPolice)==3] <- 3
+  ctOnPolice[as.numeric(countOnPolice)==4] <- 1
+  ctOnPolice[as.numeric(countOnPolice)==5] <- 2
+
+  ctOnPolice <- factor(ctOnPolice,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+  #jpeg("resp_marginals/ctOnPol.jpg")
+  pcounts <- table(ctOnPolice)
+  barplot(pcounts, main="Count On Police",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: police_trust
+[[file:ct_on_police.jpeg]]
+
+** Fire Trust
+*** code
+#+name: fire_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_fire.jpeg :results graphics :export both :session nyc 
+
+  #fire
+  countOnFire <- df[,'countOnFire']
+  ctOnFire=rep(-1,nR)
+  ctOnFire[is.na(countOnFire)==1] <- NA
+  ctOnFire[as.numeric(countOnFire)==1] <- 5
+  ctOnFire[as.numeric(countOnFire)==2] <- 4          
+  ctOnFire[as.numeric(countOnFire)==3] <- 3
+  ctOnFire[as.numeric(countOnFire)==4] <- 1
+  ctOnFire[as.numeric(countOnFire)==5] <- 2
+
+  ctOnFire <- factor(ctOnFire,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+  #jpeg("resp_marginals/ctOnFire.jpg")
+  fcounts <- table(ctOnFire)
+  barplot(fcounts, main="Count On Fire",col = "steel blue")
+
+  #dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: fire_trust
+[[file:ct_on_fire.jpeg]]
+
+** Ambulance Trust
+*** code
+#+name: ems_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_ems.jpeg :results graphics :export both :session nyc 
+
+
+#Ambulance
+  countOnAmbulance <- df[,'countOnAmbulance']
+  ctOnAmbulance=rep(-1,nR)
+
+  ctOnAmbulance[is.na(countOnAmbulance)==1] <- NA
+  ctOnAmbulance[as.numeric(countOnAmbulance)==1] <- 5
+  ctOnAmbulance[as.numeric(countOnAmbulance)==2] <- 4
+  ctOnAmbulance[as.numeric(countOnAmbulance)==3] <- 3
+  ctOnAmbulance[as.numeric(countOnAmbulance)==4] <- 1
+  ctOnAmbulance[as.numeric(countOnAmbulance)==5] <- 2
+
+  ctOnAmbulance <- factor(ctOnAmbulance,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+#  jpeg("resp_marginals/ctOnAmbulance.jpg")
+  acounts <- table(ctOnAmbulance)
+  barplot(acounts, main="Count On Ambulance",col="steel blue")
+
+#  dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: ems_trust
+[[file:ct_on_ems.jpeg]]
+
+#+name: pol_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_pol.jpeg :results graphics :export both :session nyc 
+** Leaders Trust
+*** code
+  #Leaders
+  countOnLeaders <- df[,'countOnLeaders']
+  ctOnLeaders=rep(-1,nR)
+
+  ctOnLeaders[is.na(countOnLeaders)] <- NA
+  ctOnLeaders[as.numeric(countOnLeaders)== 1] <- 5
+  ctOnLeaders[as.numeric(countOnLeaders)== 2] <- 4            
+  ctOnLeaders[as.numeric(countOnLeaders)== 3] <- 3
+  ctOnLeaders[as.numeric(countOnLeaders)== 4] <- 1
+  ctOnLeaders[as.numeric(countOnLeaders)== 5] <- 2
+
+  ctOnLeaders <- factor(ctOnLeaders,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+#  jpeg("resp_marginals/ctOnLeaders.jpg")
+  lcounts <- table(ctOnLeaders)
+  barplot(lcounts, main="Count On Leaders",col= "steel blue")
+
+#  dev.off()
+
+#+END_SRC
+*** graph
+#+RESULTS: pol_trust
+[[file:ct_on_pol.jpeg]]
+
+** Program trust
+*** code
+
+#+name: cbo_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_cbo.jpeg :results graphics :export both :session nyc 
+
+#Programs
+countOnPrograms <- df[,'countOnPrograms']
+ctOnPrograms=rep(-1,nR)
+
+
+  ctOnPrograms[is.na(countOnPrograms)] <- NA
+  ctOnPrograms[as.numeric(countOnPrograms)== 1] <- 5
+  ctOnPrograms[as.numeric(countOnPrograms)== 2] <- 4            
+  ctOnPrograms[as.numeric(countOnPrograms)== 3] <- 3
+  ctOnPrograms[as.numeric(countOnPrograms)== 4] <- 1
+  ctOnPrograms[as.numeric(countOnPrograms)== 5] <- 2
+
+  ctOnPrograms <- factor(ctOnPrograms,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+#  jpeg("resp_marginals/ctOnPrograms.jpg")
+  cbocounts <- table(ctOnPrograms)
+  barplot(cbocounts, main="Count On Programs",col= "steel blue")
+
+#  dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: cbo_trust
+[[file:ct_on_cbo.jpeg]]
+
+** Teacher trust
+*** code
+#+name: teacher_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_teacher.jpeg :results graphics :export both :session nyc 
+
+#Teachers
+countOnTeachers <- df[,'countOnTeachers']
+ctOnTeachers=rep(-1,nR)
+
+
+  ctOnTeachers[is.na(countOnTeachers)] <- NA
+  ctOnTeachers[as.numeric(countOnTeachers)== 1] <- 5
+  ctOnTeachers[as.numeric(countOnTeachers)== 2] <- 4            
+  ctOnTeachers[as.numeric(countOnTeachers)== 3] <- 3
+  ctOnTeachers[as.numeric(countOnTeachers)== 4] <- 1
+  ctOnTeachers[as.numeric(countOnTeachers)== 5] <- 2
+
+  ctOnTeachers <- factor(ctOnTeachers,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+#  jpeg("resp_marginals/ctOnTeachers.jpg")
+  tcounts <- table(ctOnTeachers)
+  barplot(tcounts, main="Count On Teachers",col= "steel blue")
+
+#  dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: teacher_trust
+[[file:ct_on_teacher.jpeg]]
+
+** Grouped Trust
+*** code
+#+name: civil_trust
+#+header: :quality 100
+#+BEGIN_SRC R :file ct_on_civil.jpeg :results graphics :export both :session nyc 
+
+  institutions <- c("Police",
+  "Fire","Ambulance","Leaders","Programs","Teachers")
+
+  ctdata <- matrix(c(pcounts,
+                   fcounts,
+                   acounts,
+                   lcounts,
+                   cbocounts,
+                   tcounts),byrow=TRUE,nrow=6)
+  colnames(ctdata)<-names(pcounts)
+  row.names(ctdata)<-institutions
+  #pdf("grouped_scenario/civilTrust.pdf")
+  #jpeg("grouped_scenario/civilTrust.jpg")
+  city_col <- c("darkblue",
+                  "red",
+                  "steelblue",
+                  "yellow",
+                  "purple",
+                  "green"
+                  )
+
+  barplot(ctdata,
+          main=paste("Trust in civil institutions"),
+          col=city_col,
+          beside = TRUE)
+  legend(x="top",legend = institutions, fill = city_col,cex = 1.0)
+
+  #dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: civil_trust
+[[file:ct_on_civil.jpeg]]
+
 
