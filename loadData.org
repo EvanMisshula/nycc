@@ -36,7 +36,7 @@ return x*x
 #+RESULTS: square
 : 25
 
-* manage R data frame
+* Manage R data frame
 ** demo1 
 #+name: load_var
 #+BEGIN_SRC R :file check_load.txt :results output :export both :session nyc
@@ -309,8 +309,8 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 
 #+RESULTS: write_the_file
 [[file:cc.csv]]
-
-* civil trust
+* Collective efficacy
+* Civil trust
 ** Police Trust
 *** code
 #+name: police_trust
@@ -563,4 +563,298 @@ ctOnTeachers=rep(-1,nR)
 #+RESULTS: civil_trust
 [[file:ct_on_civil.jpeg]]
 
+** Report crime to police
+* Victimization
+** Respondent has been shot at
+*** code
+#+name: shot_victim
+#+header: :quality 100
+#+BEGIN_SRC R :file shot_victim.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  EverShotAt <- df[,'EverShotAt']
 
+  EverShotAtA <- table(EverShotAt,useNA = "ifany")
+  EverShotAtPct <- round(100*prop.table(EverShotAtA),0)
+
+
+
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(EverShotAtPct, main="Percent ever shot at",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: shot_victim
+[[file:shot_victim.jpeg]]
+** Respondent has been stabbed
+*** code
+#+name: stabbed_victim
+#+header: :quality 100
+#+BEGIN_SRC R :file stabbed_victim.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  EverStabbed <- df[,'EverStabbed']
+
+  EverStabbedA <- table(EverStabbed,useNA = "ifany")
+  EverStabbedPct <- round(100*prop.table(EverStabbedA),0)
+
+
+
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(EverStabbedPct, main="Percent ever stabbed",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graphs
+#+RESULTS: stabbed_victim
+[[file:stabbed_victim.jpeg]]
+** Number of guns the respondent has seen
+*** code
+#+name: guns_seen
+#+header: :quality 100
+#+BEGIN_SRC R :file guns_seen.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  GunsSeenCount <- df[,'GunsSeenCount']
+
+  GunsSeenCount_data <- rep(-1,nR)
+
+  GunsSeenCount_data[is.na(GunsSeenCount)] <- NA
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==1] <-1
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==2] <-2
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==3] <- 11     
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==4] <- 3
+
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==5] <- 4
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==6] <- 5    
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==7] <- 6
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==8] <- 7
+
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==9] <- 8
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==10] <- 9
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==11] <- 10
+  GunsSeenCount_data[as.numeric(GunsSeenCount)==12] <- 12        
+
+
+  GunsSeenCountf <- factor(GunsSeenCount_data,levels = 1:12,
+                           labels=c(0:9,"10+","Decline"), ordered=TRUE)
+
+
+  GunsSeenCountTtl <- table(GunsSeenCountf)
+  GunsSeenCountPct <- round(100*prop.table(GunsSeenCountTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(GunsSeenCountPct, main="Percent seen gun count",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: guns_seen
+[[file:guns_seen.jpeg]]
+
+** Repondent is aware of recent gun threats
+*** code
+#+name: threats_heard
+#+header: :quality 100
+#+BEGIN_SRC R :file threats_heard.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  HeardPersonThreatenedWGunHereL12Count <- df[,'HeardPersonThreatenedWGunHereL12Count']
+
+  HeardPersonThreatenedWGunHereL12Count_data <- rep(-1,nR)
+
+  HeardPersonThreatenedWGunHereL12Count_data[is.na(HeardPersonThreatenedWGunHereL12Count)] <- NA
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==1] <-1
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==2] <-2
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==3] <- 11     
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==4] <- 3
+
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==5] <- 4
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==6] <- 5    
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==7] <- 6
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==8] <- 7
+
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==9] <- 8
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==10] <- 9
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==11] <- 10
+  HeardPersonThreatenedWGunHereL12Count_data[as.numeric(HeardPersonThreatenedWGunHereL12Count)==12] <- 12        
+
+
+  HeardPersonThreatenedWGunHereL12Countf <- factor(HeardPersonThreatenedWGunHereL12Count_data,levels = 1:12,
+                           labels=c(0:9,"10+","Decline"), ordered=TRUE)
+
+
+  HeardPersonThreatenedWGunHereL12CountTtl <- table(HeardPersonThreatenedWGunHereL12Countf)
+  HeardPersonThreatenedWGunHereL12CountPct <- round(100*prop.table(HeardPersonThreatenedWGunHereL12CountTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(HeardPersonThreatenedWGunHereL12CountPct, main="Percent heard gun threats here in the last 12 months",col = "steel blue")
+
+  #dev.off()
+#+end_src
+
+*** graphs
+#+Results: threats_heard
+[[file:threats_heard.jpeg]]
+
+** Respondent has heard recent gun shots
+*** code
+#+name: shots_heard
+#+header: :quality 100
+#+BEGIN_SRC R :file shots_heard.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  HeardGunshotsHereL12Count <- df[,'HeardGunshotsHereL12Count']
+
+  HeardGunshotsHereL12Count_data <- rep(-1,nR)
+
+  HeardGunshotsHereL12Count_data[is.na(HeardGunshotsHereL12Count)] <- NA
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==1] <-1
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==2] <-2
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==3] <- 11     
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==4] <- 3
+
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==5] <- 4
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==6] <- 5    
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==7] <- 6
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==8] <- 7
+
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==9] <- 8
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==10] <- 9
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==11] <- 10
+  HeardGunshotsHereL12Count_data[as.numeric(HeardGunshotsHereL12Count)==12] <- 12        
+
+
+  HeardGunshotsHereL12Countf <- factor(HeardGunshotsHereL12Count_data,levels = 1:12,
+                           labels=c(0:9,"10+","Decline"), ordered=TRUE)
+
+
+  HeardGunshotsHereL12CountTtl <- table(HeardGunshotsHereL12Countf)
+  HeardGunshotsHereL12CountPct <- round(100*prop.table(HeardGunshotsHereL12CountTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(HeardGunshotsHereL12CountPct, main="Percent heard gun shots here in the last 12 months",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graphs
+#+RESULTS: shots_heard
+[[file:shots_heard.jpeg]]
+    
+** Respondent has been recently stopped by police 
+*** code
+#+name: sqf
+#+header: :quality 100
+#+BEGIN_SRC R :file sqf.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  SQFCount <- df[,'SQF12mo']
+
+  SQFCount_data <- rep(-1,nR)
+
+  SQFCount_data[is.na(SQFCount)] <- NA
+  SQFCount_data[as.numeric(SQFCount)==1] <-1
+  SQFCount_data[as.numeric(SQFCount)==2] <-2
+  SQFCount_data[as.numeric(SQFCount)==3] <- 11     
+  SQFCount_data[as.numeric(SQFCount)==4] <- 3
+
+  SQFCount_data[as.numeric(SQFCount)==5] <- 4
+  SQFCount_data[as.numeric(SQFCount)==6] <- 5    
+  SQFCount_data[as.numeric(SQFCount)==7] <- 6
+  SQFCount_data[as.numeric(SQFCount)==8] <- 7
+
+  SQFCount_data[as.numeric(SQFCount)==9] <- 8
+  SQFCount_data[as.numeric(SQFCount)==10] <- 9
+  SQFCount_data[as.numeric(SQFCount)==11] <- 10
+  SQFCount_data[as.numeric(SQFCount)==12] <- 12        
+
+
+  SQFCountf <- factor(SQFCount_data,levels = 1:12,
+                           labels=c(0:9,"10+","Dec"), ordered=TRUE)
+
+
+  SQFCountTtl <- table(SQFCountf)
+  SQFCountPct <- round(100*prop.table(SQFCountTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(SQFCountPct, main="Percent subject to Stop, Question and Frisk last 12 months",col = "steel blue")
+
+  #dev.off()
+#+end_src
+
+*** graphs
+#+Results: sqf
+[[file:sqf.jpeg]]
+
+
+** Respondent's estimate of age at death
+* Safety
+** Respondent thinks gangs are common
+** Respondent feels safe during the day
+** Respondent feels safe at night
+** Respondent thinks friend feels safe during the day
+** Respondent thinks friend feels safe at night
+* Social Media
+** Social media used
+** Respondent is aware of people of being threatened on Facebook
+** Respondent is aware of people of being threatened on Twitter
+** Respondent is aware of people of being threatened on Instagram
+** Respondent is aware of people of being threatened on Snapchat
+** Respondent is aware of people of being threatened on Youtube
+** Respondent is aware of people of being threatened on Vine
+** Respondent is aware of people of being threatened on other social media
+* Program awareness
+** Anti-violence images
+*** Respondent has seen image
+** Outreach
+*** Respondent knows employees
+** Communication
+*** Respondent communicated with emplyees recently
+* Demographics
+** Respondent age
+** Respondent education completed
+** Respondent is in school
+** Respondent employment
+** Respondent mobility
+** Respondent sleep time
+** create location variable
+#+name: create_location_variable
+#+BEGIN_SRC R :file locatationf.csv :results output org :export both :session nyc 
+  library(ascii)
+  DateCollectedShStr <- substr(x=DateCollectedStr,start = 1,stop = 10)
+  DateCollectedd <- as.Date(DateCollectedShStr)
+  location_data <- rep(-1,length(DateCollectedShStr))
+
+  location_data[DateCollectedd >= as.Date("2014-03-14") & DateCollectedd <= as.Date("2014-03-27")] <- 1
+  location_data[DateCollectedd >= as.Date("2014-04-02") & DateCollectedd <= as.Date("2014-04-12")] <- 2
+  location_data[DateCollectedd >= as.Date("2014-04-25") & DateCollectedd <= as.Date("2014-05-07")] <- 3
+  location_data[DateCollectedd >= as.Date("2014-05-27") & DateCollectedd <= as.Date("2014-06-04")] <- 4
+
+  location <- factor(location_data,levels = 1:4,labels = c("Harlem","EastNY","SJamaica","SBronx"))
+  t1 <- "Respondent Neighborhood"
+  b <- ascii(table(location),header=T,include.colnames=T,caption=t1)
+  print(b,type="org")
+#+end_src
+
+#+results: create_location_variable
+
+* Network
+** Respondent coupon
+** Respondent referrals
+** Interviewer
+** Time in interview
+* Catchment violence indicies
+
+* Research Questions
+** Describe Sample, Age, Gender, Education, Employment
+** Is victimization associated with higher violent ideation?
+** Is employment associated with lower violent ideation?
+** Is age associated with violent ideation?
+** Is lower civil trust associated with violent ideation?
+** Is lower collective efficacy associated with violent ideation?
+** Are perceptions of safety associated with lower violent ideation?
+** Are perceptions of gang prevelance associated with higher violent ideation?
+** Is a low age at death, associated with higher violent ideation?
+** How much of the variation in violent ideation can we explain?
+
+** RDS homophily on violence
+
+* Nice Pedestrian overview
+* Move them to factors and construct
