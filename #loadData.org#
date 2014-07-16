@@ -310,6 +310,154 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 #+RESULTS: write_the_file
 [[file:cc.csv]]
 * Collective efficacy
+** Helped a neighbor
+*** code
+#+name: helped_neighbor
+#+header: :quality 100
+#+BEGIN_SRC R :file helped_neighbor.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  HelpedNeighbor <- df[,'HelpedNeighbor']
+
+  HelpedNeighbor_data <- rep(-1,nR)
+
+  HelpedNeighbor_data[is.na(HelpedNeighbor)] <- NA
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==1] <-NA
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==2] <-2
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==3] <- 3
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==4] <- 4
+
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==5] <- NA
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==6] <- NA
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==7] <- NA
+  HelpedNeighbor_data[as.numeric(HelpedNeighbor)==8] <- 1
+
+    HelpedNeighborf <- factor(HelpedNeighbor_data,levels = 1:4,
+                           labels=c("last-wk","last-month",
+                               "last-year","never"), ordered=TRUE)
+
+
+
+  HelpedNeighborTtl <- table(HelpedNeighborf)
+  HelpedNeighborPct <- round(100*prop.table(HelpedNeighborTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(HelpedNeighborPct, main="Percent helped a neighbor in the last 12 months",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: helped_neighbor
+    [[file:helped_neighbor.jpeg]]
+** Helped by a neighbor
+*** code
+#+name: helped_by_neighbor
+#+header: :quality 100
+#+BEGIN_SRC R :file helped_by_neighbor.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  HelpedByNeighbor <- df[,'HelpedByNeighbor']
+
+  HelpedByNeighbor_data <- rep(-1,nR)
+
+  HelpedByNeighbor_data[is.na(HelpedByNeighbor)] <- NA
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==1] <-NA
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==2] <-2
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==3] <- 3
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==4] <- 4
+
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==5] <- NA
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==6] <- NA
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==7] <- NA
+  HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==8] <- 1
+
+  HelpedByNeighborf <- factor(HelpedByNeighbor_data,levels = 1:4,
+                           labels=c("last-wk","last-month",
+                               "last-year","never"), ordered=TRUE)
+
+
+  HelpedByNeighborTtl <- table(HelpedByNeighborf)
+  HelpedByNeighborPct <- round(100*prop.table(HelpedByNeighborTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(HelpedByNeighborPct, main="Percent helped a neighbor in the last 12 months",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: helped_by_neighbor
+[[file:helped_by_neighbor.jpeg]]
+
+** Time since neighbor conflict
+*** code
+#+name: conflict_with_neighbor
+#+header: :quality 100
+#+BEGIN_SRC R :file conflict_with_neighbor.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  lastNeighborConflictTime <- df[,'lastNeighborConflictTime']
+
+  lastNeighborConflictTime_data <- rep(-1,nR)
+
+  lastNeighborConflictTime_data[is.na(lastNeighborConflictTime)] <- NA
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==1] <-NA
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==2] <-3
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==3] <- 2
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==4] <- 1
+
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==5] <- NA
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==6] <- NA
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==7] <- NA
+  lastNeighborConflictTime_data[as.numeric(lastNeighborConflictTime)==8] <- 4
+
+  lastNeighborConflictTimef <- factor(lastNeighborConflictTime_data,levels = 1:4,
+                           labels=c("never","last-year",
+                               "last-month","last-wk"), ordered=TRUE)
+
+
+  lastNeighborConflictTimeTtl <- table(lastNeighborConflictTimef)
+  lastNeighborConflictTimePct <- round(100*prop.table(lastNeighborConflictTimeTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(lastNeighborConflictTimePct, main="Percent had a neighbor conflict in the last 12 months",col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: conflict_with_neighbor
+[[file:conflict_with_neighbor.jpeg]]
+
+** Grouped Efficacy
+#+name: efficacy_group
+#+header: :quality 100
+#+BEGIN_SRC R :file efficacy_group.jpeg :results graphics :export both :session nyc 
+
+    efficacy_components <- c(
+    "Helped a neighbor","Helped by a neighbor",
+"Conflict with a neighbor (reversed)")
+
+    ctdata <- matrix(c(HelpedNeighborPct,
+                     HelpedByNeighborPct,
+                     lastNeighborConflictTimePct),byrow=TRUE,nrow=3)
+    colnames(ctdata)<-names(HelpedNeighborPct)
+    row.names(ctdata)<-efficacy_components
+    #pdf("grouped_scenario/civilTrust.pdf")
+    #jpeg("grouped_scenario/civilTrust.jpg")
+    city_col <- c("darkblue",
+                    "steelblue",
+                    "red")
+
+
+  ctdataPct <- round(100*prop.table(as.table(ctdata),1),0)
+    barplot(ctdataPct,
+            main=paste("Construct of efficacy"),
+            col=city_col,
+            beside = TRUE)
+    legend(x="top",legend = efficacy_components, fill = city_col,cex = 1.0)
+
+    #dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: efficacy_group
+[[file:efficacy_group.jpeg]]
+
 * Civil trust
 ** Police Trust
 *** code
@@ -1038,10 +1186,9 @@ ctOnTeachers=rep(-1,nR)
 #+header: :quality 100
 #+BEGIN_SRC R :file safety_group.jpeg :results graphics :export both :session nyc 
 
-    safety_components <- c(
+    safety_components <- c("gang prevelance",
     "Resp Feels Safe (day)","Resp Feels Safe (night)",
-  "Friend Feels Safe (day)","Friend Feels Safe (night)",
-"gang prevelance")
+  "Friend Feels Safe (day)","Friend Feels Safe (night)")
 
     ctdata <- matrix(c(fsdcounts,
                      fsncounts,
@@ -1071,7 +1218,7 @@ ctOnTeachers=rep(-1,nR)
 #+RESULTS: safety_group
 [[file:safety_group.jpeg]]
 
-* Social Media
+* Social media
 ** Social media used
 ** Respondent is aware of people of being threatened on Facebook
 ** Respondent is aware of people of being threatened on Twitter
