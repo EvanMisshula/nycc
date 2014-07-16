@@ -833,7 +833,6 @@ ctOnTeachers=rep(-1,nR)
     FAgeAtDeathN <- as.numeric(FAgeAtDeaths)
   hist(FAgeAtDeathN[!is.na(FAgeAtDeathN)],freq=FALSE,
        xlab="Age at Death",main="Respondent's esitmate of Refferer's Age At Death")
-
 #+End_src
 
 #+name: FAgeAtDeathLT35
@@ -850,8 +849,14 @@ ctOnTeachers=rep(-1,nR)
 
   barplot(FAgeAtDeathLT35Pct, main="Percent who expect their refferer to be dead at 35",col = "steel blue")
 #+End_src
-
 *** graphs
+
+#+RESULTS: FAgeAtDeath
+[[file:FAgeAtDeath.jpeg]]
+
+
+#+RESULTS: FAgeAtDeathLT35
+[[file:FAgeAtDeathLT35.jpeg]]
 * Safety
 ** Respondent thinks gangs are common
 ** Respondent feels safe during the day
