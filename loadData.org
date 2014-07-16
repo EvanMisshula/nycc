@@ -670,7 +670,7 @@ ctOnTeachers=rep(-1,nR)
 #+END_SRC
 *** graph
 #+RESULTS: teacher_trust
-[[file:ct_on_teacher.jpeg]]
+    [[file:ct_on_teacher.jpeg]]
 
 ** Grouped Trust
 *** code
@@ -712,6 +712,41 @@ ctOnTeachers=rep(-1,nR)
 [[file:ct_on_civil.jpeg]]
 
 ** Report crime to police
+*** code
+#+name: report_crime
+#+header: :quality 100
+#+BEGIN_SRC R :file report_crime.jpeg :results graphics :export both :session nyc 
+
+#Teachers
+reportPolice <- df[,'reportPolice']
+ctReportPolice=rep(-1,nR)
+
+
+  ctReportPolice[is.na(reportPolice)] <- NA
+  ctReportPolice[as.numeric(reportPolice)== 1] <- 5
+  ctReportPolice[as.numeric(reportPolice)== 2] <- 4            
+  ctReportPolice[as.numeric(reportPolice)== 3] <- 3
+  ctReportPolice[as.numeric(reportPolice)== 4] <- 1
+  ctReportPolice[as.numeric(reportPolice)== 5] <- 2
+
+  ctReportPolice <- factor(ctReportPolice,levels = 1:5,
+                       labels = c("Yes-d",
+                           "Yes-p",
+                           "Unsure",
+                           "No-p",
+                           "No-d")
+                       ,ordered=TRUE)
+
+#  jpeg("resp_marginals/ctReportPolice.jpg")
+  pctcounts <- round(100*prop.table(table(ctReportPolice)),0)
+  barplot(pctcounts, main="Percentage who would report a crime",col= "steel blue")
+
+#  dev.off()
+#+END_SRC
+*** graph
+#+RESULTS: report_crime
+[[file:report_crime.jpeg]]
+
 * Victimization
 ** Respondent has been shot at
 *** code
@@ -1567,11 +1602,151 @@ col = "steel blue")
 
 * Program awareness
 ** Anti-violence images
-*** Respondent has seen image
+*** code
+#+name: seen_any_image
+#+header: :quality 100
+#+BEGIN_SRC R :file seen_any_image.jpeg :results graphics :export both :session nyc 
+  imgIdx <- 80+2*(0:4)
+
+  ## for(i in imgIdx) {
+  ##     print(table(as.numeric(df[,i])))
+  ##       }
+
+  SeenImage_data <- rep(-1,nrow(df))
+  SeenImage1 <- as.numeric(df[,'Image1'])==2
+  SeenImage2 <- as.numeric(df[,'Image2'])==2
+  SeenImage3 <- as.numeric(df[,'Image3'])==2
+  SeenImage4 <- as.numeric(df[,'Image4'])==2
+  SeenImage5 <- as.numeric(df[,'Image5'])==2
+
+
+  SeenImage_data[SeenImage1 | SeenImage2 | SeenImage3 | SeenImage4 | SeenImage5] <- 2
+  SeenImage_data[!SeenImage1 & !SeenImage2 & !SeenImage3 & !SeenImage4 & !SeenImage5] <- 1
+
+  SeenAnyImage <- factor(SeenImage_data,levels = 1:2,labels = c("No","Yes"),ordered = TRUE)
+
+  tSeenAnyImage <- round(100*prop.table(table(SeenAnyImage)),0)
+  barplot(tSeenAnyImage,main = "Percentage of Respondents that have seen program materials",col="steel blue")
+
+#+END_SRC
+*** graph
+#+RESULTS: seen_any_image
+[[file:seen_any_image.jpeg]]
+
 ** Outreach
-*** Respondent knows employees
+*** code
+#+name: know_any_employee
+#+header: :quality 100
+#+BEGIN_SRC R :file know_any_employee.jpeg :results graphics :export both :session nyc 
+pIdx <- 90+2*(0:7)
+
+for(i in pIdx) {
+    print(table(as.numeric(df[,i])))
+      }
+
+RknowsP_data <- rep(-1,nrow(df))
+RknowsP1 <- as.numeric(df[,'RknowsP1'])==2
+RknowsP2 <- as.numeric(df[,'RknowsP2'])==2
+RknowsP3 <- as.numeric(df[,'RknowsP3'])==2
+RknowsP4 <- as.numeric(df[,'RknowsP4'])==2
+RknowsP5 <- as.numeric(df[,'RknowsP5'])==2
+RknowsP6 <- as.numeric(df[,'RknowsP6'])==2
+RknowsP7 <- as.numeric(df[,'RknowsP7'])==2
+RknowsP8 <- as.numeric(df[,'RknowsP8'])==2
+
+
+RknowsP_data[RknowsP1 | RknowsP2 | RknowsP3 | RknowsP4 | RknowsP5 | RknowsP6 | RknowsP7 | RknowsP8] <- 2
+RknowsP_data[!RknowsP1 & !RknowsP2 & !RknowsP3 & !RknowsP4 & !RknowsP5 & !RknowsP6 & !RknowsP7 & !RknowsP8] <- 1
+
+AnyRknowsP <- factor(RknowsP_data,levels = 1:2,labels = c("No","Yes"),ordered = TRUE)
+
+tAnyRknowsP <- round(100*prop.table(table(AnyRknowsP)),0)
+barplot(tAnyRknowsP,main = "Percentage of Respondents that know a program employee", col="steel blue")
+#+END_SRC
+*** graph
+#+RESULTS: know_any_employee
+[[file:know_any_employee.jpeg]]
+
 ** Communication
-*** Respondent communicated with emplyees recently
+*** Respondent communicated with employees frequently
+#+name: comm_any_employee
+#+header: :quality 100
+#+BEGIN_SRC R :file comm_any_employee.jpeg :results graphics :export both :session nyc 
+cIdx <- 91+2*(0:7)
+
+for(i in cIdx) {
+    print(table(as.numeric(df[,i])))
+      }
+
+RcommP_data <- rep(-1,nrow(df))
+RcommP1 <- as.numeric(df[,'RcommP1L12mo'])==3
+RcommP2 <- as.numeric(df[,'RcommP2L12mo'])==3
+RcommP3 <- as.numeric(df[,'RcommP3L12mo'])==3
+RcommP4 <- as.numeric(df[,'RcommP4L12mo'])==3
+RcommP5 <- as.numeric(df[,'RcommP5L12mo'])==3
+RcommP6 <- as.numeric(df[,'RcommP6L12mo'])==3
+RcommP7 <- as.numeric(df[,'RcommP7L12mo'])==3
+RcommP8 <- as.numeric(df[,'RcommP8L12mo'])==3
+
+
+RcommP_data[RcommP1 | RcommP2 | RcommP3 | RcommP4 | RcommP5 | RcommP6 | RcommP7 | RcommP8] <- 2
+RcommP_data[!RcommP1 & !RcommP2 & !RcommP3 & !RcommP4 & !RcommP5 & !RcommP6 & !RcommP7 & !RcommP8] <- 1
+
+AnyRcommP <- factor(RcommP_data,levels = 1:2,labels = c("No","Yes"),ordered = TRUE)
+
+tAnyRcommP <- round(100*prop.table(table(AnyRcommP)),0)
+barplot(tAnyRcommP,main = "Pct of Resp that speak regularly to an employee", col="steel blue")
+#+END_SRC
+*** graph
+#+RESULTS: comm_any_employee
+[[file:comm_any_employee.jpeg]]
+
+** Attended an anti-violence rally 
+*** code
+#+name: AttendAVrallyL12mo
+#+header: :quality 100
+#+BEGIN_SRC R :file AttendAVrallyL12mo.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  AttendAVrallyL12mo <- df[,'AttendAVrallyL12mo']
+
+  AttendAVrallyL12mo_data <- rep(-1,nR)
+
+  AttendAVrallyL12mo_data[is.na(AttendAVrallyL12mo)] <- NA
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==1] <-1
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==2] <- 2
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==3] <- 2     
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==4] <- 2
+
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==5] <- 2
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==6] <- 2    
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==7] <- 2
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==8] <- 2
+
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==9] <- 2
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==10] <- 2
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==11] <- 2
+  AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==12] <- 2
+AttendAVrallyL12mo_data[as.numeric(AttendAVrallyL12mo)==13] <- NA
+
+
+  AttendAVrallyL12mof <- factor(AttendAVrallyL12mo_data,levels = 1:2,
+                           labels=c("No","Yes"), ordered=TRUE)
+
+
+  AttendAVrallyL12moTtl <- table(AttendAVrallyL12mof)
+  AttendAVrallyL12moPct <- round(100*prop.table(AttendAVrallyL12moTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(AttendAVrallyL12moPct, 
+main="Percent attended an anti-violence rally",
+col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: AttendAVrallyL12mo
+[[file:AttendAVrallyL12mo.jpeg]]
+
 * Demographics
 ** Respondent age
 ** Respondent education completed
