@@ -1668,7 +1668,7 @@ barplot(tAnyRknowsP,main = "Percentage of Respondents that know a program employ
 [[file:know_any_employee.jpeg]]
 
 ** Communication
-*** Respondent communicated with employees frequently
+*** code
 #+name: comm_any_employee
 #+header: :quality 100
 #+BEGIN_SRC R :file comm_any_employee.jpeg :results graphics :export both :session nyc 
@@ -1749,11 +1749,209 @@ col = "steel blue")
 
 * Demographics
 ** Respondent age
+*** code
+#+name: age
+#+header: :quality 100
+#+BEGIN_SRC R :file age.jpeg :results graphics :export both :session nyc 
+age <- as.numeric(levels(df$age)[as.numeric(df$age)])
+
+pctAge <- prop.table(table(age))
+
+pctAgeP <- round(100*pctAge,0)
+barplot(pctAgeP,main = "Pct of respondents at each age", col="steel blue")
+#+END_SRC
+*** graph
+#+RESULTS: age
+[[file:age.jpeg]]
 ** Respondent education completed
+*** code 
+#+name: education
+#+header: :quality 100
+#+BEGIN_SRC R :file education.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  EdCompleted <- df[,'EdCompleted']
+
+  EdCompleted_data <- rep(-1,nR)
+
+  EdCompleted_data[is.na(EdCompleted)] <- NA
+  EdCompleted_data[as.numeric(EdCompleted)==1] <-4
+  EdCompleted_data[as.numeric(EdCompleted)==2] <- 5
+  EdCompleted_data[as.numeric(EdCompleted)==3] <- 2     
+  EdCompleted_data[as.numeric(EdCompleted)==4] <- 4
+
+  EdCompleted_data[as.numeric(EdCompleted)==5] <- 2
+  EdCompleted_data[as.numeric(EdCompleted)==6] <- 3    
+  EdCompleted_data[as.numeric(EdCompleted)==7] <- 4
+  EdCompleted_data[as.numeric(EdCompleted)==8] <- 1
+
+  EdCompleted_data[as.numeric(EdCompleted)==9] <- 2
+  EdCompleted_data[as.numeric(EdCompleted)==10] <- NA
+  EdCompleted_data[as.numeric(EdCompleted)==11] <- 3
+  EdCompleted_data[as.numeric(EdCompleted)==12] <- 3
+EdCompleted_data[as.numeric(EdCompleted)==13] <- 4
+
+
+  EdCompletedf <- factor(EdCompleted_data,levels = 1:5,
+                           labels=c("lt-hs","ged","some-coll",
+                               "Assoc","BA+"), ordered=TRUE)
+
+
+  EdCompletedTtl <- table(EdCompletedf)
+  EdCompletedPct <- round(100*prop.table(EdCompletedTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(EdCompletedPct, 
+main="Education completed percentage sample",
+col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: education
+[[file:education.jpeg]]
+
 ** Respondent is in school
+*** code
+#+name: inSchool
+#+header: :quality 100
+#+BEGIN_SRC R :file inSchool.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  inSchool <- df[,'inSchool']
+
+  inSchool_data <- rep(-1,nR)
+
+  inSchool_data[is.na(inSchool)] <- NA
+  inSchool_data[as.numeric(inSchool)==1] <-NA
+  inSchool_data[as.numeric(inSchool)==2] <- 1
+  inSchool_data[as.numeric(inSchool)==3] <- 2     
+
+
+  inSchoolf <- factor(inSchool_data,levels = 1:2,
+                           labels=c("No","Yes"),ordered=TRUE)
+
+
+  inSchoolTtl <- table(inSchoolf)
+  inSchoolPct <- round(100*prop.table(inSchoolTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(inSchoolPct, 
+main="Respondent is in school percentage sample",
+col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: inSchool
+[[file:inSchool.jpeg]]
+
 ** Respondent employment
+*** code
+#+name: employed
+#+header: :quality 100
+#+BEGIN_SRC R :file employed.jpeg :results graphics :export both :session nyc 
+  nR <- nrow(df)
+  employed <- df[,'employed']
+
+  employed_data <- rep(-1,nR)
+
+  employed_data[is.na(employed)] <- NA
+  employed_data[as.numeric(employed)==1] <- NA
+  employed_data[as.numeric(employed)==2] <- 3
+  employed_data[as.numeric(employed)==3] <- NA     
+  employed_data[as.numeric(employed)==4] <- 2
+
+  employed_data[as.numeric(employed)==5] <- 1
+
+
+  employedf <- factor(employed_data,levels = 1:3,
+                           labels=c("unemployed","part-time","full-time"), ordered=TRUE)
+
+
+  employedTtl <- table(employedf)
+  employedPct <- round(100*prop.table(employedTtl),0)
+  #jpeg("resp_marginals/ctOnPol.jpg")
+
+  barplot(employedPct, 
+main="Employment status percentage sample",
+col = "steel blue")
+
+  #dev.off()
+#+end_src
+
+#+RESULTS: employed
+[[file:employed.jpeg]]
+
 ** Respondent mobility
+*** code
+#+name: timeOutside
+#+header: :quality 100
+#+BEGIN_SRC R :file timeOutside.jpeg :results graphics :export both :session nyc 
+timeOutside <- as.numeric(levels(df$TimeOutsideHere)[as.numeric(df$TimeOutsideHere)])
+
+pctTimeOutside <- round(100*prop.table(table(timeOutside)),0)
+
+  barplot(pctTimeOutside, 
+main="Respondent time outside the nighborhood percentage sample",
+col = "steel blue")
+
+  #dev.off()
+#+end_src
+*** graph
+#+RESULTS: timeOutside
+[[file:timeOutside.jpeg]]
 ** Respondent sleep time
+*** code
+#+name: sleepTime
+#+header: :quality 100
+#+BEGIN_SRC R :file sleepTime.jpeg :results graphics :export both :session nyc 
+sleepTimeC <- gsub("M ","M",gsub("  ","",levels(df$sleepTime)))
+
+
+sleepData=rep(-1,nR)
+sleepData[sleepTimeC=="11 AM"] <- 6
+sleepData[sleepTimeC=="12 PM (Noon)"] <- 6
+sleepData[sleepTimeC=="1 PM"] <- 6
+sleepData[sleepTimeC=="2 PM"] <- 7            
+sleepData[sleepTimeC=="3 PM"] <- 7
+sleepData[sleepTimeC=="4 PM"] <- 7
+sleepData[sleepTimeC=="5 PM"] <- 8           
+sleepData[sleepTimeC=="6 PM"] <- 8
+sleepData[sleepTimeC=="7 PM"] <- 8
+sleepData[sleepTimeC=="8 PM"] <- 1
+sleepData[sleepTimeC=="9 PM"] <- 1
+sleepData[sleepTimeC=="10 PM"] <- 1
+sleepData[sleepTimeC=="11 PM"] <- 2
+sleepData[sleepTimeC=="12 AM (Midnight)"] <- 2
+sleepData[sleepTimeC=="1 AM"] <- 2
+sleepData[sleepTimeC=="2 AM"] <- 3
+sleepData[sleepTimeC=="3 AM"] <- 3            
+sleepData[sleepTimeC=="4 AM"] <- 3
+sleepData[sleepTimeC=="5 AM"] <- 4
+sleepData[sleepTimeC=="6 AM"] <- 4
+sleepData[sleepTimeC=="7 AM"] <- 4
+sleepData[sleepTimeC=="8 AM"] <- 5
+sleepData[sleepTimeC=="9 AM"] <- 5
+sleepData[sleepTimeC=="10 AM"] <- 5
+
+
+sleepLabels <- c("e-night","l-night",
+                 "e-mor","l-mor",
+                 "e-after","l-after",
+                 "e-eve","l-eve"
+                 )
+
+                 
+sleep <- factor(sleepData,levels = 1:8,labels = sleepLabels,ordered = TRUE)
+
+counts <- round(100*prop.table(table(sleep)),0)
+barplot(counts, main="Sleep Time",col="steel blue")
+#+END_SRC
+*** graphs
+#+RESULTS: sleepTime
+[[file:sleepTime.jpeg]]
+
+
+
 ** create location variable
 #+name: create_location_variable
 #+BEGIN_SRC R :file locatationf.csv :results output org :export both :session nyc 
