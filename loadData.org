@@ -1973,6 +1973,185 @@ barplot(counts, main="Sleep Time",col="steel blue")
 
 #+results: create_location_variable
 
+* Respondent violence score
+*** code
+
+#+name: setRscore
+#+header: :quality 100
+#+BEGIN_SRC R :file rScore.csv :results org :export both :session nyc 
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+newLevelsIdx <- (1:nrow(df))[as.numeric(location)==4]
+dfbx <- df[381:580,23:38]
+dfnbx <- data.frame(matrix(-1,nrow=nrow(df),ncol=16))
+colnames(dfnbx) <- colnames(dfbx)
+
+    
+for(j in 1:ncol(dfbx)) {
+    dfbx[,j] <- levels(dfbx[,j])[as.numeric(dfbx[,j])]
+    dfbx[dfbx[,j]=="1(Ignore)       ",j] <- 1
+    dfbx[dfbx[,j]=="2               ",j] <- 1              
+    dfbx[dfbx[,j]=="3 (React verball",j] <- 2
+    dfbx[dfbx[,j]=="4               ",j] <- 2
+    dfbx[dfbx[,j]=="5 (Get Physical)",j] <- 3
+    dfbx[dfbx[,j]=="6               ",j] <- 3
+    dfbx[dfbx[,j]=="7 (Pull a weapon",j] <- 4
+    dfbx[dfbx[,j]=="8               ",j] <- 4
+    dfbx[dfbx[,j]=="9 (Use a weapon)",j] <- 5
+    dfbx[dfbx[,j]=="10              ",j] <- 5
+    dfbx[dfbx[,j]=="11 (Not sure/Dec",j] <- 6
+
+    dfbx[dfbx[,j]=="1(Ignore)     ",j] <- 1
+    dfbx[dfbx[,j]=="2             ",j] <- 1              
+    dfbx[dfbx[,j]=="3 (React verba",j] <- 2
+    dfbx[dfbx[,j]=="4             ",j] <- 2
+    dfbx[dfbx[,j]=="5 (Get Physica",j] <- 3
+    dfbx[dfbx[,j]=="6             ",j] <- 3
+    dfbx[dfbx[,j]=="7 (Pull a weap",j] <- 4
+    dfbx[dfbx[,j]=="8             ",j] <- 4
+    dfbx[dfbx[,j]=="9 (Use a weapo",j] <- 5
+    dfbx[dfbx[,j]=="10            ",j] <- 5
+    dfbx[dfbx[,j]=="11 (Not sure/D",j] <- 6
+
+    dfbx[,j] <- as.numeric(dfbx[,j])
+}
+
+#assign
+rscore <- list()
+#rscore.h <- list()
+#rscore.e  <- list()
+rscorer <- list()
+scenarios <- list()
+pctDecline <- list()
+counts <- list()
+#counts.h <- list()
+#counts.e <- list()
+pctRDecline <- list()
+subt <- list()
+
+## for(j in 23:38) {
+##     scenarios[[varNames[j]]] <- rep(-1,nR)
+##     rscore[[varNames[j]]] <- -1
+##     rscorer[[varNames[j]]] <- -1
+##     pctRDecline[[varNames[j]]] <- -1
+##     counts[[varNames[j]]] <- rep(-1,nR)
+##     subt[[varNames[j]]] <- -1
+##     scenarios[[varNames[j]]] <- rep(-1,nR)
+##     cat(class(df[,j]),"\n",sep="")
+## }
+
+
+
+for(j in (23:38)) {
+    
+    dfnbx[,j-22]["Ignore"==trim(levels(df[,j])[df[,j]])] <- 1
+    dfnbx[,j-22]["React verbally"==trim(levels(df[,j])[df[,j]])] <- 2
+    dfnbx[,j-22]["Get Physical"==trim(levels(df[,j])[df[,j]])] <- 3
+    dfnbx[,j-22]["Pull a weapon"==trim(levels(df[,j])[df[,j]])] <- 4
+    dfnbx[,j-22]["Use a weapon"==trim(levels(df[,j])[df[,j]])] <- 5
+    dfnbx[,j-22]["Not sure/Decline"==trim(levels(df[,j])[df[,j]])] <- 6
+}
+
+dfnbx[381:580,] <-dfbx
+rscore <- list()
+#rscore.h <- list()
+#rscore.e  <- list()
+rscorer <- list()
+scenarios <- list()
+pctDecline <- list()
+counts <- list()
+#counts.h <- list()
+#counts.e <- list()
+pctRDecline <- list()
+subt <- list()
+
+for(j in (23:38)) {
+    rscorer[[j-22]] <- median(dfnbx[,j-22][dfnbx[,j-22]!=6],na.rm = TRUE)
+    rscore[[j-22]]  <- mean(dfnbx[,j-22][dfnbx[,j-22]!=6],na.rm = TRUE)
+
+    pctRDecline[[j-22]] <- round(sum(dfnbx[,j-22]==6)/length(dfnbx[,j-22]),2)
+
+dfnbx[,j-22] <- factor(dfnbx[,j-22],
+                          levels = 1:6,
+                          labels = c(
+                              "Ignore",
+                              "VReact",
+                              "PReact",
+                              "DWeapon",
+                              "UWeapon",
+                              "Decline"
+                              ),ordered=TRUE)
+    counts[[j-22]] <- table(dfnbx[,j-22])
+#    counts.h[[j-22]]<- table(dfnbx[[j-22]][df$location=="Harlem"])
+#    counts.e[[j-22]]<- table(dfnbx[[j-22]][df$location=="EastNY"])
+}
+#+END_SRC
+
+#+name: respVioIndex
+#+header: :quality 100
+#+BEGIN_SRC R :file respVioIndex.csv :results org :export both :session nyc 
+create_scenario_df <- function(df,dfnbx)
+    {
+        
+        ddf$RFightPartyNotHere <- dfnbx$RFightPartyNotHere   
+        ddf$RBrothersAttacker <- dfnbx$RBrothersAttacker    
+        ddf$RBumpSwingNotHere <- dfnbx$RBumpSwingNotHere    
+        ddf$RRriendAttacked <- dfnbx$RFriendAttacked      
+        ddf$RStolenJacketPublic <- dfnbx$RStolenJacketPublic  
+
+        ddf$ROwedMoneyPlayed <- dfnbx$ROwedMoneyPlayed     
+        ddf$RMoneyOwed <- dfnbx$RMoneyOwed           
+        ddf$RBetWelch <- dfnbx$RBetWelch            
+        ddf$RPublicDis <- dfnbx$RPublicDis           
+        ddf$RBodegaCheat <- dfnbx$RBodegaCheat         
+
+        ddf$RBasketball <- dfnbx$RBasketball          
+        ddf$RJordans <- dfnbx$RJordans             
+        ddf$RSocialMedia <- dfnbx$RSocialMedia         
+        ddf$RexGirlPlayed <- dfnbx$RexGirlPlayed        
+        ddf$RGirlClaim <- dfnbx$RGirlClaim           
+        ddf$RGirlsNewG <- dfnbx$RGirlsNewG           
+        ddf <- ddf[,2:17]
+        respWeight <- matrix(-1,nrow=nrow(ddf),ncol=16)
+        resp <-matrix(-1,nrow=nrow(ddf),ncol=16)        
+        for(j in 1:16) {
+            resp[,j] <- as.numeric(ddf[,j])
+
+        }
+
+        for(j in 1:16) {
+            respWeight[ is.na(resp[,j]) | resp[,j] == 6,j] <- 0
+            respWeight[!is.na(resp[,j]) & resp[,j] < 6,j] <- 1
+
+    }
+        
+        validRespCount <- apply(respWeight,1,sum)
+
+
+        respVioIndex <- rep(NA,nrow(ddf))
+
+        
+        respVioIndex[validRespCount!=0] <- apply((resp[validRespCount!=0,]
+                         * respWeight[validRespCount!=0,] *
+                         matrix(rep(1/validRespCount[validRespCount!=0],16),
+                                ncol = 16, byrow = FALSE)),1,sum)
+
+
+        ddf$validRespCount <- validRespCount
+        ddf$respVioIndex <- respVioIndex
+        return(ddf)
+}
+#+END_SRC
+
+#+name: vio_score
+#+header: :quality 100
+#+BEGIN_SRC R :file vio_score.jpeg :results graphics :export both :session nyc 
+hist(respVioIndex,main="Distribution of respondent violence scores",col="steel blue")
+#+END_SRC
+
+#+RESULTS: vio_score
+[[file:vio_score.jpeg]]
+
+
 * Network
 ** Respondent coupon
 ** Respondent referrals

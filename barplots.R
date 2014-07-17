@@ -458,6 +458,7 @@ for(j in 1:length(friendRespScen)) {
             beside = TRUE)
     dev.off()
 }
+
 sleepData=rep(-1,nR)
 
 sleepData[sleepTimeC=="7 PM"] <- 1

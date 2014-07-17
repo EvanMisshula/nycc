@@ -17,8 +17,9 @@
   HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==7] <- NA
   HelpedByNeighbor_data[as.numeric(HelpedByNeighbor)==8] <- 1
 
-  HelpedByNeighborf <- factor(HelpedByNeighbor_data,levels = 1:12,
-                           labels=c(0:9,"10+","Decline"), ordered=TRUE)
+  HelpedByNeighborf <- factor(HelpedByNeighbor_data,levels = 1:4,
+                           labels=c("last-wk","last-month",
+                               "last-year","never"), ordered=TRUE)
 
 
   HelpedByNeighborTtl <- table(HelpedByNeighborf)
