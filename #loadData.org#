@@ -165,6 +165,9 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
   (varDf)
 
 #+END_SRC
+
+
+
 ** create location variable
 #+name: create_location_variable
 #+BEGIN_SRC R :file locatationf.csv :results output org :export both :session nyc 

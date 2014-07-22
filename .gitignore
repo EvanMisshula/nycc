@@ -3,6 +3,7 @@
 *~
 .#*
 
+*.sps
 *.csv
 *.sav
 *.txt
