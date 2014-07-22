@@ -1,11 +1,11 @@
 # Compiled
 *.elc
 *~
-.#*
+*#*.#*
 
 *.sps
 *.csv
 *.sav
 *.txt
-*.Rdata
+*.RData
 *.RHistory
