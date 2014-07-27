@@ -36,7 +36,7 @@ return x*x
 #+end_src
 
 * Manage R data frame
-** demo1 
+
 #+name: load_var
 #+BEGIN_SRC R :file check_load.txt :results output :export both :session nyc
   library(foreign)
@@ -161,45 +161,11 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
                 "AttendAVrallyL12mo")
 
   varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
-  #write.table(varDf,file = "varCheck.csv",sep = ",")
+
   (varDf)
-
-#+END_SRC
-** create location variable
-#+name: create_location_variable
-#+BEGIN_SRC R :file locatationf.csv :results output org :export both :session nyc 
-  library(ascii)
-  DateCollectedShStr <- substr(x=DateCollectedStr,start = 1,stop = 10)
-  DateCollectedd <- as.Date(DateCollectedShStr)
-  location_data <- rep(-1,length(DateCollectedShStr))
-
-  location_data[DateCollectedd >= as.Date("2014-03-14") & DateCollectedd <= as.Date("2014-03-27")] <- 1
-  location_data[DateCollectedd >= as.Date("2014-04-02") & DateCollectedd <= as.Date("2014-04-12")] <- 2
-  location_data[DateCollectedd >= as.Date("2014-04-25") & DateCollectedd <= as.Date("2014-05-07")] <- 3
-  location_data[DateCollectedd >= as.Date("2014-05-27") & DateCollectedd <= as.Date("2014-06-04")] <- 4
-
-  location <- factor(location_data,levels = 1:4,labels = c("Harlem","EastNY","SJamaica","SBronx"))
-  t1 <- "Respondent Neighborhood"
-  b <- ascii(table(location),header=T,include.colnames=T,caption=t1)
-  print(b,type="org")
-#+end_src
-
-#+results: create_location_variable
-#+BEGIN_SRC org
-[[file:locatationf.csv]]
-#+END_SRC
-* Program Recognition
-
-#+name: sub_out_image_vars
-#+BEGIN_SRC R :file check_images_set.txt :results output :export both :session nyc 
 
       imagesResp <- paste("Image",1:5,sep = "")
       imageCount <- paste("SeenImage",1:5,"count",sep = "")
-      ## if(survey=="Harlem") {
-      ##     persImgCt <- 6
-      ## } else {
-      ##     persImgCt <- 8
-      ## }
       persImgCt <- 8
       personRespA <- paste("RknowsP",1:persImgCt,sep = "")
       personCommA <- paste("RcommP",1:persImgCt,"L12mo",sep = "")
@@ -229,19 +195,7 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
       
 
 
-  #    varNamesH <- c(varNames,imageM,respMH)
-  #    varNamesE <- c(varNames,imageM,respME)
       varNamesA <- c(varNames,imageM,respMA)
-      #rawLabelsH <- colnames(df2)
-      #rawLabelsE <- colnames(df1)
-
-      ## varDfH <- data.frame(matrix(c(rawLabels[1:length(varNamesH)],varNamesH),byrow = F,ncol=2))
-      ## write.table(varDf,file = "varCheckH.csv",sep = ",")
-
-      ## varDfE <- data.frame(matrix(c(rawLabels[1:length(varNamesE)],varNamesE),byrow = F,ncol=2))
-      ## write.table(varDf,file = "varCheck.csvE",sep = ",")
-
-   #   varNames <- varNamesH
 
       varNames <- c(varNamesA,
                     "age",
@@ -256,52 +210,60 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
                     "Coup3",
                     "Interviewer")
 
-    #  varDfE <- data.frame(matrix(c(rawLabels[1:length(varNamesE)],varNamesE),byrow = F,ncol=2)) 
+
 varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,ncol=2))
-    #  write.table(varDfE,file = "varCheckE.csv",sep = ",")
-  (varDf)
-      ## varNamesE <- c(varNamesE,
-      ##               "age",
-      ##               "EdCompleted",
-      ##               "inSchool",
-      ##               "employed",
-      ##               "TimeOutsideHere",
-      ##               "sleepTime",
-      ##               "Coup1",
-      ##               "Coup2",
-      ##               "Coup3",
-      ##               "Interviewer")
 
-      ## varDfE <- data.frame(matrix(c(rawLabels[1:length(varNamesE)],varNamesE),byrow = F,ncol=2))
-      ## write.table(varDfE,file = "varCheckE.csv",sep = ",")
 
-      ## colnames(df1) <- varNamesE
-      ## colnames(df2) <- varNamesH
-
-      ## pgmR.E <- df1[,89:104]
-      ## pgmR.H <- df2[,89:100]
-
-      ## df1 <- df1[,c(1:88,105:114)]
-      ## df2 <- df2[,c(1:88,101:110)]
-
-      ## df1$location="EastNY"
-      ## df2$location="Harlem"
-
-      ## df <- rbind(df2,df1)
-
-#+END_SRC
-
-#+RESULTS: sub_out_image_vars
-[[file:check_images_set.txt]]
-
-#+name: write_the_file
-#+BEGIN_SRC R :file cc.csv :results output :export both :session nyc 
   colnames(df) <- varNames
   write.table(x=df,file="ciyCouncil_all.csv",sep = "\t")
 #+END_SRC
 
-#+RESULTS: write_the_file
-[[file:cc.csv]]
+#+RESULTS: load_var
+[[file:check_load.txt]]
+
+** create location variable
+#+name: create_location_variable
+#+BEGIN_SRC R  :results value :export both :session nyc 
+    library(ascii)
+    library(devtools)
+    dev_mode(on=T)
+    install_github("eusebe/ascii")
+    # when finished do:
+
+    #dev_mode(on=F) #and you are back to having stable ggplot2
+    DateCollectedShStr <- substr(x=DateCollectedStr,start = 1,stop = 10)
+    DateCollectedd <- as.Date(DateCollectedShStr)
+    location_data <- rep(-1,length(DateCollectedShStr))
+
+    location_data[DateCollectedd >= as.Date("2014-03-14") & DateCollectedd <= as.Date("2014-03-27")] <- 1
+    location_data[DateCollectedd >= as.Date("2014-04-02") & DateCollectedd <= as.Date("2014-04-12")] <- 2
+    location_data[DateCollectedd >= as.Date("2014-04-25") & DateCollectedd <= as.Date("2014-05-07")] <- 3
+    location_data[DateCollectedd >= as.Date("2014-05-27") & DateCollectedd <= as.Date("2014-06-04")] <- 4
+
+  location <- factor(location_data,levels = 1:4,labels = c("Harlem","EastNY","SJamaica","SBronx"))
+  t1 <- "Respondent Neighborhood"
+  b <- ascii(table(location),header=T,include.colnames=T,include.rownames=F,caption=t1)
+    
+
+#+end_src
+
+#+RESULTS: create_location_variable
+
+
+#+name: print_location_variable
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+print(b,type="org")
+#+END_SRC
+
+#+RESULTS: print_location_variable
+#+BEGIN_SRC org
+,#+CAPTION: Respondent Neighborhood
+| Harlem | EastNY | SJamaica | SBronx |
+|--------+--------+----------+--------|
+| 182.00 | 198.00 | 191.00   | 200.00 |
+#+END_SRC
+
+
 * Collective efficacy
 ** Helped a neighbor
 *** code
@@ -338,9 +300,50 @@ varDf <- data.frame(matrix(c(rawLabels[1:length(varNames)],varNames),byrow = F,n
 
   #dev.off()
 #+end_src
+
+#+name: print_helped_neigbor
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+  t1 <- "Helped a neighbor"
+  b <- ascii(HelpedNeighborPct,header=T,include.colnames=T,include.rownames=F,caption=t1)
+  print(b,type="org")
+#+END_SRC
+
+#+RESULTS: print_helped_neigbor
+#+BEGIN_SRC org
+d> #+CAPTION: Helped a neighbor
+| last-wk | last-month | last-year | never |
+|---------+------------+-----------+-------|
+| 75.00   | 16.00      | 7.00      | 3.00  |
+#+END_SRC
+
+
+#+name: print_helped_neigbor_by_neighborhood
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+  HelpedNeighborNeighbTtl <- table(location,HelpedNeighborf)
+  HelpedNeighborNeighbPct <- round(100*prop.table(HelpedNeighborNeighbTtl,1),0)
+  t1 <- "Helped a neighbor"
+  b <- ascii(HelpedNeighborNeighbPct,header=T,include.colnames=T,include.rownames=T,caption=t1)
+  print(b,type="org")
+#+END_SRC
+
+#+RESULTS: print_helped_neigbor_by_neighborhood
+#+BEGIN_SRC org
+d> d> d> #+CAPTION: Helped a neighbor
+|            |          | *HelpedNeighborf* |            |           |       |
+|            |          | last-wk           | last-month | last-year | never |
+|------------+----------+-------------------+------------+-----------|-------|
+| *location* | Harlem   | 83.00             | 12.00      | 3.00      | 2.00  |
+|            | EastNY   | 72.00             | 19.00      | 6.00      | 3.00  |
+|            | SJamaica | 71.00             | 20.00      | 8.00      | 1.00  |
+|            | SBronx   | 75.00             | 12.00      | 9.00      | 4.00  |
+#+END_SRC
+
+
 *** graph
 #+RESULTS: helped_neighbor
 [[file:helped_neighbor.jpeg]]
+
+
 ** Helped by a neighbor
 *** code
 #+name: helped_by_neighbor
@@ -1653,8 +1656,52 @@ col = "steel blue")
 
   tSeenAnyImage <- round(100*prop.table(table(SeenAnyImage)),0)
   barplot(tSeenAnyImage,main = "Percentage of Respondents that have seen program materials",col="steel blue")
-
+  SeenAnyImage <- factor(SeenImage_data,levels = 1:2,labels = c("No","Yes"),ordered = TRUE)
+  tSeenAnyImage <- round(100*prop.table(table(SeenAnyImage)),0)
+  t1 <- "Seen any program image"
+  b <- ascii(tSeenAnyImage,include.rownames = FALSE,include.colnames = TRUE,caption=t1)
 #+END_SRC
+#+name: print_seen_any_image
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+  print(b,type="org")
+#+END_SRC
+
+#+RESULTS: print_seen_any_image
+#+BEGIN_SRC org
+,#+CAPTION: Seen any program image
+| No    | Yes   |
+|-------+-------|
+| 20.00 | 80.00 |
+#+END_SRC
+
+
+#+name: calc_seen_any_image_by_neighborhood
+#+BEGIN_SRC R  :results silent :export code :session nyc 
+  SeenImageNeighb <- table(location,SeenAnyImage)
+  tSeenAnyImageNeighb <- round(100*prop.table(SeenImageNeighb,1),0)
+  t1 <- "Seen any image by neighborhood"
+  b <- ascii(tSeenAnyImageNeighb,include.rownames = TRUE,include.colnames = TRUE,caption=t1)
+#+END_SRC
+
+
+#+name: print_seen_any_image_by_neighborhood
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+print(b,type="org")
+#+END_SRC
+
+#+RESULTS: print_seen_any_image_by_neighborhood
+#+BEGIN_SRC org
+,#+CAPTION: Seen any image by neighborhood
+|            |          | *SeenAnyImage* |       |
+|            |          | No             | Yes   |
+|------------+----------+----------------|-------|
+| *location* | Harlem   | 20.00          | 80.00 |
+|            | EastNY   | 7.00           | 93.00 |
+|            | SJamaica | 42.00          | 58.00 |
+|            | SBronx   | 10.00          | 90.00 |
+#+END_SRC
+
+
 *** graph
 #+RESULTS: seen_any_image
 [[file:seen_any_image.jpeg]]
@@ -1689,6 +1736,33 @@ AnyRknowsP <- factor(RknowsP_data,levels = 1:2,labels = c("No","Yes"),ordered = 
 tAnyRknowsP <- round(100*prop.table(table(AnyRknowsP)),0)
 barplot(tAnyRknowsP,main = "Percentage of Respondents that know a program employee", col="steel blue")
 #+END_SRC
+#+name: calc_knows_any_employee_by_neighborhood
+#+BEGIN_SRC R  :results silent :export code :session nyc 
+  tAnyRknowsPNeighb <- table(location,AnyRknowsP)
+  tKnowsAnybodyNeighb <- round(100*prop.table(tAnyRknowsPNeighb,1),0)
+  t1 <- "Knows any employee by neighborhood"
+  b <- ascii(tKnowsAnybodyNeighb,include.rownames = TRUE,include.colnames = TRUE,caption=t1)
+#+END_SRC
+
+
+#+name: print_knows_any_employee_by_neighborhood
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+print(b,type="org")
+#+END_SRC
+
+#+RESULTS: print_knows_any_employee_by_neighborhood
+#+BEGIN_SRC org
+,#+CAPTION: Communicates with any employee by neighborhood
+|            |          | *AnyRcommP* |       |
+|            |          | No          | Yes   |
+|------------+----------+-------------|-------|
+| *location* | Harlem   | 88.00       | 12.00 |
+|            | EastNY   | 86.00       | 14.00 |
+|            | SJamaica | 90.00       | 10.00 |
+|            | SBronx   | 92.00       | 8.00  |
+#+END_SRC
+
+
 *** graph
 #+RESULTS: know_any_employee
 [[file:know_any_employee.jpeg]]
@@ -1723,6 +1797,22 @@ AnyRcommP <- factor(RcommP_data,levels = 1:2,labels = c("No","Yes"),ordered = TR
 tAnyRcommP <- round(100*prop.table(table(AnyRcommP)),0)
 barplot(tAnyRcommP,main = "Pct of Resp that speak regularly to an employee", col="steel blue")
 #+END_SRC
+
+#+name: calc_communicates_any_employee_by_neighborhood
+#+BEGIN_SRC R  :results silent :export code :session nyc 
+  tAnyRcommPNeighb <- table(location,AnyRcommP)
+  tcommAnybodyNeighb <- round(100*prop.table(tAnyRcommPNeighb,1),0)
+  t1 <- "Communicates with any employee by neighborhood"
+  b <- ascii(tcommAnybodyNeighb,include.rownames = TRUE,include.colnames = TRUE,caption=t1)
+#+END_SRC
+
+
+#+name: print_communicates_any_employee_by_neighborhood
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+print(b,type="org")
+#+END_SRC
+
+
 *** graph
 #+RESULTS: comm_any_employee
 [[file:comm_any_employee.jpeg]]
@@ -1769,6 +1859,23 @@ col = "steel blue")
 
   #dev.off()
 #+end_src
+
+
+#+name: calc_attended_antiviolence_rally_by_neighborhood
+#+BEGIN_SRC R  :results silent :export code :session nyc 
+  tAttendAVrallyL12mofNeighb <- table(location,  AttendAVrallyL12mof)
+  tAttendAVrallyL12mofNeighb <- round(100*prop.table(tAttendAVrallyL12mofNeighb,1),0)
+  t1 <- "Attended an anti-violence rally by neighborhood"
+  b <- ascii(tAttendAVrallyL12mofNeighb,include.rownames = TRUE,include.colnames = TRUE,caption=t1)
+#+END_SRC
+
+
+#+name: print_attended_antiviolence_rally_by_neighborhood
+#+BEGIN_SRC R  :results output org :export both :session nyc 
+print(b,type="org")
+#+END_SRC
+
+
 *** graph
 #+RESULTS: AttendAVrallyL12mo
 [[file:AttendAVrallyL12mo.jpeg]]

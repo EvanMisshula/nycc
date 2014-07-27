@@ -1,0 +1,17 @@
+* Initialize languages
+* Load dataframe and change variable names
+* Create location variable
+* Create Resp Violence Index
+* Create Peer Violence Index
+* Describe Sample
+** Age
+** Gender
+** Education
+** Victimization
+** Employment
+* Is age associated with violent ideation?
+* Is victimization associated with higher violent ideation?
+* Is employment associated with lower violent ideation?
+* Is civil trust associated with lower violent ideation 
+* Is collective efficacy associated with lower violent ideation?
+* Are the programs reaching target populations?
